@@ -1,8 +1,9 @@
 artifact_uri: file:///D:/Zaman%20Data/Assignment-CICD/Topic1/Task2/mlruns/765680153628263465/8d8fa4ec82454a2484535abfbc872489/artifacts
+deleted_time: 1764178414731
 end_time: 1764063285692
 entry_point_name: ''
 experiment_id: '765680153628263465'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: 8d8fa4ec82454a2484535abfbc872489
 run_name: Iteration_1_Baseline_RandomForest
 run_uuid: 8d8fa4ec82454a2484535abfbc872489

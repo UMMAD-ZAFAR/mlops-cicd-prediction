@@ -5,6 +5,7 @@ Trains two iterations of models and tracks experiments
 
 import pandas as pd
 import numpy as np
+import os
 import mlflow
 import mlflow.sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -19,6 +20,11 @@ import joblib
 import json
 import warnings
 warnings.filterwarnings('ignore')
+
+# Configure MLflow for cross-platform compatibility
+os.makedirs('mlruns', exist_ok=True)
+os.makedirs('models', exist_ok=True)
+mlflow.set_tracking_uri(os.path.abspath("mlruns"))
 
 def load_and_prepare_data():
     """Load cleaned dataset and prepare features"""
@@ -62,9 +68,9 @@ def evaluate_model(model, X_train, X_test, y_train, y_test, features):
     metrics = {
         'train_accuracy': accuracy_score(y_train, y_train_pred),
         'test_accuracy': accuracy_score(y_test, y_test_pred),
-        'test_precision': precision_score(y_test, y_test_pred),
-        'test_recall': recall_score(y_test, y_test_pred),
-        'test_f1': f1_score(y_test, y_test_pred),
+        'test_precision': precision_score(y_test, y_test_pred, zero_division=0),
+        'test_recall': recall_score(y_test, y_test_pred, zero_division=0),
+        'test_f1': f1_score(y_test, y_test_pred, zero_division=0),
         'test_roc_auc': roc_auc_score(y_test, y_test_proba)
     }
     
@@ -123,22 +129,18 @@ def train_iteration_1(X_train, X_test, y_train, y_test, features):
             model, X_train, X_test, y_train, y_test, features
         )
         
-        # Log metrics
+        # Log metrics (works in CI)
         mlflow.log_metrics(metrics)
         
-        # Log feature importance
-        mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
+        # Skip artifact logging in CI (causes Windows path issues)
+        # mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
+        # mlflow.log_dict({
+        #     'confusion_matrix': cm.tolist(),
+        #     'labels': ['success', 'failure']
+        # }, "confusion_matrix.json")
+        # mlflow.sklearn.log_model(model, "model")
         
-        # Log confusion matrix
-        mlflow.log_dict({
-            'confusion_matrix': cm.tolist(),
-            'labels': ['success', 'failure']
-        }, "confusion_matrix.json")
-        
-        # Log model
-        mlflow.sklearn.log_model(model, "model")
-        
-        # Save model locally
+        # Save model locally (always works)
         joblib.dump(model, 'models/model_rf_v1.pkl')
         
         # Print results
@@ -206,22 +208,18 @@ def train_iteration_2(X_train, X_test, y_train, y_test, features):
             model, X_train, X_test, y_train, y_test, features
         )
         
-        # Log metrics
+        # Log metrics (works in CI)
         mlflow.log_metrics(metrics)
         
-        # Log feature importance
-        mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
+        # Skip artifact logging in CI (causes Windows path issues)
+        # mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
+        # mlflow.log_dict({
+        #     'confusion_matrix': cm.tolist(),
+        #     'labels': ['success', 'failure']
+        # }, "confusion_matrix.json")
+        # mlflow.sklearn.log_model(model, "model")
         
-        # Log confusion matrix
-        mlflow.log_dict({
-            'confusion_matrix': cm.tolist(),
-            'labels': ['success', 'failure']
-        }, "confusion_matrix.json")
-        
-        # Log model
-        mlflow.sklearn.log_model(model, "model")
-        
-        # Save model locally
+        # Save model locally (always works)
         joblib.dump(model, 'models/model_xgb_v2.pkl')
         
         # Print results
@@ -256,16 +254,19 @@ def compare_iterations(metrics_v1, metrics_v2):
     
     print("\n", comparison)
     
-    # Determine best model
+    # Determine best model (prioritize F1 for imbalanced data)
     if metrics_v2['test_f1'] > metrics_v1['test_f1']:
         best_model = 'XGBoost (Iteration 2)'
         best_path = 'models/model_xgb_v2.pkl'
+        best_f1 = metrics_v2['test_f1']
     else:
         best_model = 'RandomForest (Iteration 1)'
         best_path = 'models/model_rf_v1.pkl'
+        best_f1 = metrics_v1['test_f1']
     
     print(f"\n🏆 Best Model: {best_model}")
-    print(f"   F1 Score: {max(metrics_v1['test_f1'], metrics_v2['test_f1']):.4f}")
+    print(f"   F1 Score: {best_f1:.4f}")
+    print(f"   ROC-AUC: {max(metrics_v1['test_roc_auc'], metrics_v2['test_roc_auc']):.4f}")
     
     # Copy best model
     import shutil
@@ -278,10 +279,6 @@ def compare_iterations(metrics_v1, metrics_v2):
 
 def main():
     """Main training pipeline"""
-    
-    # Create models directory
-    import os
-    os.makedirs('models', exist_ok=True)
     
     # Set MLflow experiment
     mlflow.set_experiment("CICD_Failure_Prediction")

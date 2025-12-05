@@ -1,6 +1,7 @@
 artifact_location: file:///D:/Zaman%20Data/Assignment-CICD/Topic1/Task2/mlruns/765680153628263465
 creation_time: 1764063213625
 experiment_id: '765680153628263465'
-last_update_time: 1764063213625
-lifecycle_stage: active
+last_update_time: 1764178414731
+lifecycle_stage: deleted
 name: CICD_Failure_Prediction
+tags: {}

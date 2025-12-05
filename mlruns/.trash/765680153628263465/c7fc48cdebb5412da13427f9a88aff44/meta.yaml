@@ -1,8 +1,9 @@
 artifact_uri: file:///D:/Zaman%20Data/Assignment-CICD/Topic1/Task2/mlruns/765680153628263465/c7fc48cdebb5412da13427f9a88aff44/artifacts
+deleted_time: 1764178414731
 end_time: 1764063293002
 entry_point_name: ''
 experiment_id: '765680153628263465'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: c7fc48cdebb5412da13427f9a88aff44
 run_name: Iteration_2_Optimized_XGBoost
 run_uuid: c7fc48cdebb5412da13427f9a88aff44
