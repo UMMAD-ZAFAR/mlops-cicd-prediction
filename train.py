@@ -26,6 +26,9 @@ os.makedirs('mlruns', exist_ok=True)
 os.makedirs('models', exist_ok=True)
 mlflow.set_tracking_uri(os.path.abspath("mlruns"))
 
+#mlflow.set_tracking_uri("file:////Users/maadzee/Downloads/Task2/mlruns")
+#mlflow.set_experiment("CICD_Failure_Prediction")
+
 def load_and_prepare_data():
     """Load cleaned dataset and prepare features"""
     print("="*70)

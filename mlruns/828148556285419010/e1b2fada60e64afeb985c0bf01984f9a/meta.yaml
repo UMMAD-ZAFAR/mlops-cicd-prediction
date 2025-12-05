@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/maadzee/Downloads/Task2/mlruns/828148556285419010/e1b2fada60e64afeb985c0bf01984f9a/artifacts
+end_time: 1764967841190
+entry_point_name: ''
+experiment_id: '828148556285419010'
+lifecycle_stage: active
+run_id: e1b2fada60e64afeb985c0bf01984f9a
+run_name: Iteration_1_Baseline_RandomForest
+run_uuid: e1b2fada60e64afeb985c0bf01984f9a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1764967839611
+status: 3
+tags: []
+user_id: maadzee
