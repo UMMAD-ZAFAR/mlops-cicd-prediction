@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/maadzee/Downloads/Task2/mlruns/828148556285419010/3213a9914078436db3ef3dd6b4728aec/artifacts
+end_time: 1765129260421
+entry_point_name: ''
+experiment_id: '828148556285419010'
+lifecycle_stage: active
+run_id: 3213a9914078436db3ef3dd6b4728aec
+run_name: Iteration_2_Optimized_XGBoost
+run_uuid: 3213a9914078436db3ef3dd6b4728aec
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1765129259886
+status: 3
+tags: []
+user_id: maadzee
